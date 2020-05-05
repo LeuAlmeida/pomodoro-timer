@@ -1,9 +1,14 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import Header from '../../components/Header'
+import { Container } from './styles';
 
 function Main() {
-  return <div />;
+  return (
+    <Container>
+      <Header title="Pomodoro" sound alert />
+    </Container>
+  );
 }
 
 export default Main;

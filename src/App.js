@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-// import { Container } from './styles';
+import Main from "./pages/Main";
 
-function src() {
-  return <div />;
+function App() {
+  return <Main />;
 }
 
-export default src;
+export default App;

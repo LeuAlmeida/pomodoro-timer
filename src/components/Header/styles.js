@@ -9,7 +9,7 @@ export const Container = styled.div`
   align-items: center;
   font-size: 24px;
 
-  padding-top: 50px;
+  padding: 50px 0;
 `;
 
 export const Title = styled.span`

@@ -38,7 +38,7 @@ export default createGlobalStyle`
   justify-content: center;
   align-items: center;
 
-  box-shadow: -4px -4px 20px -5px #ffffff38, 2px 2px 20px #00000078;
+  box-shadow: inset 1px 2px #ffffff0a, -4px -4px 20px -5px #ffffff38, 2px 2px 20px #00000078;
 
    &:hover {
      opacity: 0.6;

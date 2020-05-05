@@ -81,3 +81,5 @@ export const ActionButton = styled.button`
     margin-left: 15px;
   }
 `;
+
+export const PlayStopContent = styled.div``;

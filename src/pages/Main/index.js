@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
+import { addMinutes, getMinutes } from "date-fns";
+
 import "react-circular-progressbar/dist/styles.css";
 
 import Header from "../../components/Header";
+import SquareButton from "../../components/Button/SquareButton";
+
 import {
   Container,
   CounterContainer,
@@ -16,17 +19,46 @@ import {
   ContentTitle,
   ActionButtonsContainer,
   ActionButton,
+  PlayStopContent,
 } from "./styles";
 
 function Main() {
   const [minutes, setMinutes] = useState(25);
+  const [play, setPlay] = useState(true);
+  const [maxValue, setmaxValue] = useState(25);
+
+  const [finalTime, setFinalTime] = useState(null);
+  const [initialTime, setInitialTime] = useState(null);
+
+  let valueDifference;
+
+  function handleStart() {
+    if (!play) {
+      setFinalTime(addMinutes(new Date(), maxValue % minutes));
+      setInitialTime(new Date());
+      setPlay(play);
+    }
+
+    setFinalTime(addMinutes(new Date(), maxValue));
+    setInitialTime(new Date());
+    setPlay(!play);
+
+    /**
+     * Looping infinito! Corrigir:
+     */
+    
+    // while(finalTime <= initialTime) {
+    //   setMinutes(getMinutes(finalTime <= initialTime))
+    // }
+  }
 
   return (
     <Container>
       <Header title="Pomodoro" sound alert />
+
       <CounterContainer>
         <CircularProgressbarWithChildren
-          maxValue={25}
+          maxValue={maxValue}
           strokeWidth={3}
           value={minutes}
           styles={buildStyles({
@@ -53,6 +85,10 @@ function Main() {
           <ActionButton />
         </ActionButtonsContainer>
       </ContentContainer>
+
+      <PlayStopContent>
+        <SquareButton onClick={handleStart} play={play} />
+      </PlayStopContent>
     </Container>
   );
 }

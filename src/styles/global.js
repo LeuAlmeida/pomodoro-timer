@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
 
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,700;0,900;1,100&display=swap');
 
  * {
    margin: 0;
@@ -14,9 +14,9 @@ export default createGlobalStyle`
  html, body, #root {
    min-height: 100%;
 
-   font-family: 'Open Sans Condensed', sans-serif;
+   font-family: 'Roboto', sans-serif;
    color: #9ca1bc;
-   font-weight: 300;
+   font-weight: 100;
  }
 
  body {

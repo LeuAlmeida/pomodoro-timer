@@ -3,7 +3,7 @@ import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
-import { addMinutes, getMinutes } from "date-fns";
+import { addMinutes } from "date-fns";
 
 import "react-circular-progressbar/dist/styles.css";
 
@@ -24,33 +24,46 @@ import {
 
 function Main() {
   const [minutes, setMinutes] = useState(25);
+
   const [play, setPlay] = useState(true);
   const [maxValue, setmaxValue] = useState(25);
 
   const [finalTime, setFinalTime] = useState(null);
-  const [initialTime, setInitialTime] = useState(null);
 
-  let valueDifference;
+  var min;
+  var counter;
 
   function handleStart() {
-    if (!play) {
-      setFinalTime(addMinutes(new Date(), maxValue % minutes));
-      setInitialTime(new Date());
-      setPlay(play);
-    }
-
-    setFinalTime(addMinutes(new Date(), maxValue));
-    setInitialTime(new Date());
+    setFinalTime(addMinutes(new Date(), maxValue % minutes));
     setPlay(!play);
 
-    /**
-     * Looping infinito! Corrigir:
-     */
-    
-    // while(finalTime <= initialTime) {
-    //   setMinutes(getMinutes(finalTime <= initialTime))
-    // }
+    var deadline = addMinutes(new Date(), finalTime || minutes).getTime();
+
+    counter = setInterval(() => {
+      var now = new Date().getTime();
+      var t = deadline - now;
+      min = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+
+      setMinutes(min);
+
+      if (t < 0) {
+        setMinutes(0);
+        console.log("Acabou!!!");
+      }
+
+      console.log(`Minutos: ${min}`)
+    }, 1000);
+    console.log('Play!');
   }
+
+  function handlePause() {
+    console.log('Pause!')
+    setFinalTime(null);
+    setPlay(!play);
+    clearInterval(counter);
+  }
+
+  useEffect(() => {}, []);
 
   return (
     <Container>
@@ -87,7 +100,7 @@ function Main() {
       </ContentContainer>
 
       <PlayStopContent>
-        <SquareButton onClick={handleStart} play={play} />
+        <SquareButton onClick={play ? handleStart : handlePause} play={play} />
       </PlayStopContent>
     </Container>
   );

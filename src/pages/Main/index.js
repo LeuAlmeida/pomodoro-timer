@@ -4,6 +4,7 @@ import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
+import { getMinutes } from "date-fns";
 
 import Header from "../../components/Header";
 import SquareButton from "../../components/Button/SquareButton";
@@ -30,8 +31,8 @@ export default class Main extends React.Component {
       title: "",
     };
     // Bind early, avoid function creation on render loop
-    this.setTimeForCode = this.setTime.bind(this, 1500);
-    this.setTimeForSocial = this.setTime.bind(this, 300);
+    this.setTimeForWork = this.setTime.bind(this, 1500);
+    this.setTimeForRelax = this.setTime.bind(this, 300);
     this.setTimeForCoffee = this.setTime.bind(this, 900);
     this.reset = this.reset.bind(this);
     this.play = this.play.bind(this);
@@ -64,9 +65,9 @@ export default class Main extends React.Component {
 
   getFormatTypes() {
     return [
-      { type: "work", time: 1500 },
-      { type: "relax", time: 300 },
-      { type: "coffee", time: 900 },
+      { type: "work", time: 1500, color: "#7456f2" },
+      { type: "relax", time: 300, color: "#5eef94" },
+      { type: "coffee", time: 900, color: "#d8f261" },
     ];
   }
 
@@ -76,6 +77,28 @@ export default class Main extends React.Component {
       let timeObj = timeTypes[i];
       if (timeObj.time === timeType) {
         return timeObj.type;
+      }
+    }
+    return null;
+  }
+
+  formatTime(timeType) {
+    let timeTypes = this.getFormatTypes();
+    for (let i = 0; i < timeTypes.length; i++) {
+      let timeObj = timeTypes[i];
+      if (timeObj.time === timeType) {
+        return timeObj.time;
+      }
+    }
+    return null;
+  }
+
+  formatColor(timeType) {
+    let timeTypes = this.getFormatTypes();
+    for (let i = 0; i < timeTypes.length; i++) {
+      let timeObj = timeTypes[i];
+      if (timeObj.time === timeType) {
+        return timeObj.color;
       }
     }
     return null;
@@ -161,13 +184,11 @@ export default class Main extends React.Component {
 
   _setLocalStorage(item, element) {
     let value = element.target.checked;
-    localStorage.setItem("react-pomodoro-" + item, value);
+    localStorage.setItem("pomodoro-" + item, value);
   }
 
   _getLocalStorage(item) {
-    return localStorage.getItem("react-pomodoro-" + item) == "true"
-      ? true
-      : false;
+    return localStorage.getItem("pomodoro-" + item) == "true" ? true : false;
   }
 
   alert() {
@@ -207,26 +228,34 @@ export default class Main extends React.Component {
   render() {
     return (
       <Container>
-        <Header title="Pomodoro" sound alert />
+        <Header
+          title="Pomodoro"
+          sound
+          alert
+          onCheckAlert={this._setLocalStorage.bind(this, "notification")}
+          onCheckSound={this._setLocalStorage.bind(this, "audio")}
+        />
 
         <CounterContainer>
           <CircularProgressbarWithChildren
-            maxValue={1500}
+            maxValue={this.formatTime(this.state.timeType)}
             strokeWidth={3}
             value={this.state.time}
             styles={buildStyles({
               rotation: 1,
               strokeLinecap: "round",
               pathTransitionDuration: 0.5,
-              pathColor: "#7457f2",
+              pathColor: this.formatColor(this.state.timeType),
               textColor: "#f88",
               trailColor: "#3c405e",
-              backgroundColor: "#7457f2",
+              backgroundColor: this.formatColor(this.state.timeType),
             })}
           >
             <TimeNum>{this.format(this.state.time)}</TimeNum>
             <br />
-            <TimeText>Minutes</TimeText>
+            <TimeText>
+              {getMinutes(this.state.time) === 1 ? "Minute" : "Minutes"}
+            </TimeText>
           </CircularProgressbarWithChildren>
         </CounterContainer>
 
@@ -235,9 +264,27 @@ export default class Main extends React.Component {
             {this.capitalize(this.formatType(this.state.timeType))}
           </ContentTitle>
           <ActionButtonsContainer type="work">
-            <ActionButton active />
-            <ActionButton />
-            <ActionButton />
+            <ActionButton
+              work
+              active={
+                this.formatType(this.state.timeType) === "work" ? true : false
+              }
+              onClick={this.setTimeForWork}
+            />
+            <ActionButton
+              relax
+              active={
+                this.formatType(this.state.timeType) === "relax" ? true : false
+              }
+              onClick={this.setTimeForRelax}
+            />
+            <ActionButton
+              coffee
+              active={
+                this.formatType(this.state.timeType) === "coffee" ? true : false
+              }
+              onClick={this.setTimeForCoffee}
+            />
           </ActionButtonsContainer>
         </ContentContainer>
 
@@ -247,6 +294,57 @@ export default class Main extends React.Component {
             play={!this.state.play}
           />
         </PlayStopContent>
+        {/* <div className="bottomBar">
+          <div className="controls">
+            <div className="container">
+              <div className="controlsLink">
+                <a
+                  href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
+                  target="_blank"
+                >
+                  What is Pomodoro?
+                </a>
+              </div>
+              <div className="controlsCheck">
+                <span className="check">
+                  <input
+                    type="checkbox"
+                    ref="notification"
+                    id="notification"
+                    defaultChecked={this._getLocalStorage("notification")}
+                    onChange={this._setLocalStorage.bind(this, "notification")}
+                  />
+                  <label htmlFor="notification"></label>
+                  <span className="checkTitle">Notification</span>
+                </span>
+
+                <span className="check">
+                  <input
+                    type="checkbox"
+                    ref="audio"
+                    id="audio"
+                    defaultChecked={this._getLocalStorage("audio")}
+                    onChange={this._setLocalStorage.bind(this, "audio")}
+                  />
+                  <label htmlFor="audio"></label>
+                  <span className="checkTitle">Sound</span>
+                </span>
+
+                <span className="check">
+                  <input
+                    type="checkbox"
+                    ref="vibrate"
+                    id="vibrate"
+                    defaultChecked={this._getLocalStorage("vibrate")}
+                    onChange={this._setLocalStorage.bind(this, "vibrate")}
+                  />
+                  <label htmlFor="vibrate"></label>
+                  <span className="checkTitle">Vibration</span>
+                </span>
+              </div>{" "}
+            </div>{" "}
+          </div>{" "}
+        </div> */}
       </Container>
     );
   }

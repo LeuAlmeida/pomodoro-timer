@@ -8938,11 +8938,6 @@ react-scripts@3.4.1:
   optionalDependencies:
     fsevents "2.1.2"
 
-react-title-component@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-title-component/-/react-title-component-1.0.1.tgz#cfd51418f46e8bd42bb01c6cccab51baea0f5700"
-  integrity sha1-z9UUGPRui9QrsBxszKtRuuoPVwA=
-
 react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"

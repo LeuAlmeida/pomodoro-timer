@@ -52,23 +52,36 @@ export const ActionButtonsContainer = styled.div`
 
 export const ActionButton = styled.button`
   ${(props) =>
-    props.active
-      ? css`
-          background: rgb(102, 74, 235);
-          background: linear-gradient(
-            142deg,
-            rgba(102, 74, 235, 1) 0%,
-            rgba(125, 97, 245, 1) 100%
-          );
-        `
-      : css`
-          background: rgb(70, 76, 110);
-          background: linear-gradient(
-            142deg,
-            rgba(70, 76, 110, 1) 0%,
-            rgba(58, 63, 91, 1) 100%
-          );
-        `}
+    (props.active &&
+      props.work &&
+      css`
+        background: rgb(102, 74, 235);
+        background: linear-gradient(
+          142deg,
+          rgba(102, 74, 235, 1) 0%,
+          rgba(125, 97, 245, 1) 100%
+        );
+      `) ||
+    (props.active &&
+      props.relax &&
+      css`
+        background: rgb(74, 235, 109);
+        background: linear-gradient(
+          142deg,
+          rgb(74, 235, 146) 0%,
+          rgb(97, 245, 129) 100%
+        );
+      `) ||
+    (props.active &&
+      props.coffee &&
+      css`
+        background: rgb(235, 223, 74);
+        background: linear-gradient(
+          142deg,
+          rgb(195, 235, 74) 0%,
+          rgb(229, 245, 97) 100%
+        );
+      `)}
 
   width: 12px;
   height: 12px;

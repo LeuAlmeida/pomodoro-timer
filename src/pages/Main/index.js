@@ -1,4 +1,5 @@
 import React from "react";
+
 import Mousetrap from "mousetrap";
 import {
   CircularProgressbarWithChildren,
@@ -29,6 +30,8 @@ export default class Main extends React.Component {
       play: false,
       timeType: 0,
       title: "",
+      notificating: false,
+      sounding: false,
     };
     // Bind early, avoid function creation on render loop
     this.setTimeForWork = this.setTime.bind(this, 1500);
@@ -43,6 +46,9 @@ export default class Main extends React.Component {
     this.setDefaultTime();
     this.startShortcuts();
     Notification.requestPermission();
+
+    this.setState({ notificating: this._getLocalStorage("notification") });
+    this.setState({ sounding: this._getLocalStorage("audio") });
   }
 
   elapseTime() {
@@ -182,9 +188,8 @@ export default class Main extends React.Component {
     }
   }
 
-  _setLocalStorage(item, element) {
-    let value = element.target.checked;
-    localStorage.setItem("pomodoro-" + item, value);
+  _setLocalStorage(item) {
+    localStorage.setItem("pomodoro-" + item);
   }
 
   _getLocalStorage(item) {
@@ -193,17 +198,17 @@ export default class Main extends React.Component {
 
   alert() {
     // vibration
-    if (this.refs.vibrate.checked) {
-      window.navigator.vibrate(1000);
-    }
+    // if (this.refs.vibrate.checked) {
+    //   window.navigator.vibrate(1000);
+    // }
     // audio
-    if (this.refs.audio.checked) {
+    if (this.state.sounding) {
       let audio = new Audio("songs/alarm.mp3");
       audio.play();
       setTimeout(() => audio.pause(), 1400);
     }
     // notification
-    if (this.refs.notification.checked) {
+    if (this.state.notificating) {
       if (this.state.timeType === 1500) {
         let notification = new Notification("Relax :)", {
           icon: "img/coffee.png",
@@ -228,12 +233,14 @@ export default class Main extends React.Component {
   render() {
     return (
       <Container>
+        {/* <Title render={this.state.title} /> */}
+
         <Header
           title="Pomodoro"
           sound
           alert
-          onCheckAlert={this._setLocalStorage.bind(this, "notification")}
-          onCheckSound={this._setLocalStorage.bind(this, "audio")}
+          onCheckAlert={this._setLocalStorage.bind("notification")}
+          onCheckSound={this._setLocalStorage.bind("audio")}
         />
 
         <CounterContainer>

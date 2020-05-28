@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   MdVolumeOff,
   MdVolumeUp,
@@ -6,15 +6,58 @@ import {
   MdNotificationsOff,
 } from "react-icons/md";
 
-import { Button } from './styles';
+import { Button } from "./styles";
 
 function CircleButton({ sound, alert }) {
+  const [audioState, setAudioState] = useState(false);
+  const [notificationState, setNotificationState] = useState(false);
+
+  function _getLocalStorage(item) {
+    return localStorage.getItem("pomodoro-" + item) == "true" ? true : false;
+  }
+
+  function handleSetAudio() {
+    localStorage.setItem("pomodoro-audio", !audioState);
+
+    setAudioState(!audioState);
+  }
+
+  function handleSetNotifications() {
+    localStorage.setItem("pomodoro-notification", !notificationState);
+
+    setNotificationState(!notificationState);
+  }
+
+  useEffect(() => {
+    const sounds = _getLocalStorage("audio");
+    setAudioState(sounds === "true" ? true : false);
+
+    console.log(sounds);
+
+    const alerts = _getLocalStorage("notification");
+    setNotificationState(alerts === "true" ? true : false);
+  }, []);
+
   return (
     <>
-    <Button>
-      {sound && <MdVolumeUp color="#9ca1bc" size={20} />}
-      {alert && <MdNotificationsActive color="#9ca1bc" size={20} />}
-      </Button>
+      {sound && (
+        <Button onClick={handleSetAudio}>
+          {audioState ? (
+            <MdVolumeOff color="#9ca1bc" size={20} />
+          ) : (
+            <MdVolumeUp color="#9ca1bc" size={20} />
+          )}
+        </Button>
+      )}
+      {alert && (
+        <Button onClick={handleSetNotifications}>
+          {notificationState ? (
+            <MdNotificationsOff color="#9ca1bc" size={20} />
+          ) : (
+            <MdNotificationsActive color="#9ca1bc" size={20} />
+          )}
+        </Button>
+      )}
     </>
   );
 }

@@ -32,8 +32,6 @@ function CircleButton({ sound, alert }) {
     const sounds = _getLocalStorage("audio");
     setAudioState(sounds === "true" ? true : false);
 
-    console.log(sounds);
-
     const alerts = _getLocalStorage("notification");
     setNotificationState(alerts === "true" ? true : false);
   }, []);

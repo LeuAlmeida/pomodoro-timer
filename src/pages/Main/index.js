@@ -62,6 +62,8 @@ export default class Main extends React.Component {
     }
   }
 
+
+
   format(seconds) {
     let m = Math.floor((seconds % 3600) / 60);
     let s = Math.floor((seconds % 3600) % 60);
@@ -197,30 +199,42 @@ export default class Main extends React.Component {
   }
 
   alert() {
+    const song = this._getLocalStorage("notification");
+    const notif = this._getLocalStorage("audio");
+
+    if (song === "true") {
+      this.setState({ sounding: true });
+    }
+
+    if (notif === "true")  {
+      this.setState({notificating: true})
+    }
+    
     // vibration
     // if (this.refs.vibrate.checked) {
     //   window.navigator.vibrate(1000);
     // }
     // audio
     if (this.state.sounding) {
+      this.alert("Som on!");
+
       let audio = new Audio("songs/alarm.mp3");
       audio.play();
       setTimeout(() => audio.pause(), 1400);
     }
     // notification
     if (this.state.notificating) {
+      this.alert("Notif on!");
       if (this.state.timeType === 1500) {
-        let notification = new Notification("Relax :)", {
-          icon: "img/coffee.png",
-          lang: "en",
-          body: "Go talk or drink a coffee.",
-        });
+        let notification = new Notification(
+          "Grab a coffee ;)",
+          this.setState({ timeType: "coffee" })
+        );
       } else {
-        let notification = new Notification("The time is over!", {
-          icon: "img/code.png",
-          lang: "en",
-          body: "Hey, back to code!",
-        });
+        let notification = new Notification(
+          "The time is over, let's code!",
+          this.setState({ timeType: "work" })
+        );
       }
     }
   }

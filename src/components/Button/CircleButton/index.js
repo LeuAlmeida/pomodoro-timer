@@ -40,19 +40,19 @@ function CircleButton({ sound, alert }) {
     <>
       {sound && (
         <Button onClick={handleSetAudio}>
-          {audioState ? (
-            <MdVolumeOff color="#9ca1bc" size={20} />
-          ) : (
+          {localStorage.getItem("pomodoro-audio") === "true" ? (
             <MdVolumeUp color="#9ca1bc" size={20} />
+          ) : (
+            <MdVolumeOff color="#9ca1bc" size={20} />
           )}
         </Button>
       )}
       {alert && (
         <Button onClick={handleSetNotifications}>
-          {notificationState ? (
-            <MdNotificationsOff color="#9ca1bc" size={20} />
-          ) : (
+          {localStorage.getItem("pomodoro-notification") === "true" ? (
             <MdNotificationsActive color="#9ca1bc" size={20} />
+          ) : (
+            <MdNotificationsOff color="#9ca1bc" size={20} />
           )}
         </Button>
       )}

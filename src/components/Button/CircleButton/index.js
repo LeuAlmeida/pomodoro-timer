@@ -13,7 +13,7 @@ function CircleButton({ sound, alert }) {
   const [notificationState, setNotificationState] = useState(false);
 
   function _getLocalStorage(item) {
-    return localStorage.getItem("pomodoro-" + item) == "true" ? true : false;
+    return Boolean(localStorage.getItem("pomodoro-" + item));
   }
 
   function handleSetAudio() {

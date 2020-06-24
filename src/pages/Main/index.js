@@ -129,7 +129,7 @@ export default class Main extends React.Component {
 
   reset(resetFor = this.state.time) {
     clearInterval(this.interval);
-    let time = this.format(resetFor);
+    this.format(resetFor);
     this.setState({ play: false });
   }
 
@@ -195,7 +195,7 @@ export default class Main extends React.Component {
   }
 
   _getLocalStorage(item) {
-    return localStorage.getItem("pomodoro-" + item) == "true" ? true : false;
+    return Boolean(localStorage.getItem("pomodoro-" + item));
   }
 
   alert() {

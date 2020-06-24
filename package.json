@@ -1,20 +1,53 @@
 {
-  "name": "pomodoro",
-  "version": "0.1.0",
+  "name": "pomodoro-timer",
+  "description": "A simple Pomodoro Timer made with ReactJS, Electron, Love and Coffee :)",
+  "version": "1.0.0",
+  "author": "Léu Almeida, @LeuAlmeida <leo@webid.net.br>",
   "homepage": ".",
+  "main": "main.js",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:electron": "react-scripts build && electron main.js"
+    "start:electron": "react-scripts build && electron main.js",
+    "make": "electron-forge make"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "tron_forge"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "date-fns": "^2.0.0-beta.5",
+    "electron-squirrel-startup": "^1.0.0",
     "mousetrap": "^1.6.5",
     "react": "^16.13.1",
     "react-circular-progressbar": "^2.0.3",
@@ -40,6 +73,13 @@
     ]
   },
   "devDependencies": {
-    "electron": "^8.2.5"
+    "@electron-forge/cli": "^6.0.0-beta.51",
+    "@electron-forge/maker-deb": "^6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.51",
+    "@electron-forge/maker-zip": "^6.0.0-beta.51",
+    "devtron": "^1.4.0",
+    "electron": "^8.2.5",
+    "electron-builder": "^22.7.0"
   }
 }

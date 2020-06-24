@@ -1,6 +1,8 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 
 import Mousetrap from "mousetrap";
+
 import {
   CircularProgressbarWithChildren,
   buildStyles,
@@ -34,7 +36,7 @@ export default class Main extends React.Component {
       sounding: false,
     };
     // Bind early, avoid function creation on render loop
-    this.setTimeForWork = this.setTime.bind(this, 1500);
+    this.setTimeForWork = this.setTime.bind(this, 10);
     this.setTimeForRelax = this.setTime.bind(this, 300);
     this.setTimeForCoffee = this.setTime.bind(this, 900);
     this.reset = this.reset.bind(this);
@@ -62,8 +64,6 @@ export default class Main extends React.Component {
     }
   }
 
-
-
   format(seconds) {
     let m = Math.floor((seconds % 3600) / 60);
     let s = Math.floor((seconds % 3600) % 60);
@@ -73,7 +73,7 @@ export default class Main extends React.Component {
 
   getFormatTypes() {
     return [
-      { type: "work", time: 1500, color: "#7456f2" },
+      { type: "work", time: 10, color: "#7456f2" },
       { type: "relax", time: 300, color: "#5eef94" },
       { type: "coffee", time: 900, color: "#d8f261" },
     ];
@@ -151,7 +151,7 @@ export default class Main extends React.Component {
   }
 
   setDefaultTime() {
-    let defaultTime = 1500;
+    let defaultTime = 10;
 
     this.setState({
       time: defaultTime,
@@ -163,7 +163,7 @@ export default class Main extends React.Component {
 
   getTitle(time) {
     time = typeof time === "undefined" ? this.state.time : time;
-    let _title = this.format(time) + " | Pomodoro timer";
+    let _title = this.format(time) + " | Pomodoro";
     return _title;
   }
 
@@ -199,17 +199,17 @@ export default class Main extends React.Component {
   }
 
   alert() {
-    const song = this._getLocalStorage("notification");
-    const notif = this._getLocalStorage("audio");
+    const song = Boolean(localStorage.getItem("pomodoro-audio"));
+    const notif = Boolean(localStorage.getItem("pomodoro-notification"));
 
-    if (song === "true") {
+    if (song === true) {
       this.setState({ sounding: true });
     }
 
-    if (notif === "true")  {
-      this.setState({notificating: true})
+    if (notif === true) {
+      this.setState({ notificating: true });
     }
-    
+
     // vibration
     // if (this.refs.vibrate.checked) {
     //   window.navigator.vibrate(1000);
@@ -218,25 +218,27 @@ export default class Main extends React.Component {
     if (this.state.sounding) {
       this.alert("Som on!");
 
-      let audio = new Audio("songs/alarm.mp3");
+      let audio = new Audio("../../assets/songs/alarm.mp3");
       audio.play();
       setTimeout(() => audio.pause(), 1400);
     }
     // notification
-    if (this.state.notificating) {
-      this.alert("Notif on!");
-      if (this.state.timeType === 1500) {
-        let notification = new Notification(
-          "Grab a coffee ;)",
-          this.setState({ timeType: "coffee" })
-        );
-      } else {
-        let notification = new Notification(
-          "The time is over, let's code!",
-          this.setState({ timeType: "work" })
-        );
-      }
-    }
+    // if (this.state.notificating) {
+    //   this.alert("Notif on!");
+    //   if (this.state.timeType === 10) {
+    //     let notification = new Notification(
+    //       "Grab a coffee ;)",
+    //       this.setState({ timeType: "coffee" })
+    //     );
+    //   } else {
+    //     let notification = new Notification(
+    //       "The time is over, let's code!",
+    //       this.setState({ timeType: "work" })
+    //     );
+    //   }
+    // }
+
+    alert("Alerta!");
   }
 
   capitalize(s) {
@@ -247,6 +249,9 @@ export default class Main extends React.Component {
   render() {
     return (
       <Container>
+        <Helmet>
+          <title>{this.state.title}</title>
+        </Helmet>
         {/* <Title render={this.state.title} /> */}
 
         <Header

@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import Mousetrap from "mousetrap";
 
@@ -23,6 +23,10 @@ import {
   ActionButton,
   PlayStopContent,
 } from "./styles";
+
+import audio from "../../assets/songs/alarm.mp3";
+import codeIcon from "../../assets/img/code.png";
+import coffeeIcon from "../../assets/img/coffee.png";
 
 export default class Main extends React.Component {
   constructor() {
@@ -195,12 +199,14 @@ export default class Main extends React.Component {
   }
 
   _getLocalStorage(item) {
-    return Boolean(localStorage.getItem("pomodoro-" + item));
+    return localStorage.getItem("pomodoro-" + item) === "true" ? true : false;
   }
 
   alert() {
-    const song = Boolean(localStorage.getItem("pomodoro-audio"));
-    const notif = Boolean(localStorage.getItem("pomodoro-notification"));
+    const song =
+      localStorage.getItem("pomodoro-audio") === "true" ? true : false;
+    const notif =
+      localStorage.getItem("pomodoro-notification") === "true" ? true : false;
 
     if (song === true) {
       this.setState({ sounding: true });
@@ -210,35 +216,28 @@ export default class Main extends React.Component {
       this.setState({ notificating: true });
     }
 
-    // vibration
-    // if (this.refs.vibrate.checked) {
-    //   window.navigator.vibrate(1000);
-    // }
     // audio
     if (this.state.sounding) {
-      this.alert("Som on!");
-
-      let audio = new Audio("../../assets/songs/alarm.mp3");
-      audio.play();
-      setTimeout(() => audio.pause(), 1400);
+      let alarm = new Audio(audio);
+      alarm.play();
+      setTimeout(() => alarm.pause(), 1400);
     }
-    // notification
-    // if (this.state.notificating) {
-    //   this.alert("Notif on!");
-    //   if (this.state.timeType === 10) {
-    //     let notification = new Notification(
-    //       "Grab a coffee ;)",
-    //       this.setState({ timeType: "coffee" })
-    //     );
-    //   } else {
-    //     let notification = new Notification(
-    //       "The time is over, let's code!",
-    //       this.setState({ timeType: "work" })
-    //     );
-    //   }
-    // }
 
-    alert("Alerta!");
+    if (this.state.notificating) {
+      if (this.state.timeType === 10) {
+        new Notification("Relax :)", {
+          icon: coffeeIcon,
+          lang: "en",
+          body: "Go grab a coffee.",
+        });
+      } else {
+        new Notification("The time is over!", {
+          icon: codeIcon,
+          lang: "en",
+          body: "Hey, let's work!",
+        });
+      }
+    }
   }
 
   capitalize(s) {
@@ -246,132 +245,95 @@ export default class Main extends React.Component {
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
+  handleSetAlert() {
+    this._setLocalStorage.bind("notification");
+  }
+
+  handleSetSound() {
+    this._setLocalStorage.bind("audio");
+  }
+
   render() {
     return (
-      <Container>
-        <Helmet>
-          <title>{this.state.title}</title>
-        </Helmet>
-        {/* <Title render={this.state.title} /> */}
+      <HelmetProvider>
+        <Container>
+          <Helmet>
+            <title>{this.state.title}</title>
+          </Helmet>
+          {/* <Title render={this.state.title} /> */}
 
-        <Header
-          title="Pomodoro"
-          sound
-          alert
-          onCheckAlert={this._setLocalStorage.bind("notification")}
-          onCheckSound={this._setLocalStorage.bind("audio")}
-        />
-
-        <CounterContainer>
-          <CircularProgressbarWithChildren
-            maxValue={this.formatTime(this.state.timeType)}
-            strokeWidth={3}
-            value={this.state.time}
-            styles={buildStyles({
-              rotation: 1,
-              strokeLinecap: "round",
-              pathTransitionDuration: 0.5,
-              pathColor: this.formatColor(this.state.timeType),
-              textColor: "#f88",
-              trailColor: "#3c405e",
-              backgroundColor: this.formatColor(this.state.timeType),
-            })}
-          >
-            <TimeNum>{this.format(this.state.time)}</TimeNum>
-            <br />
-            <TimeText>
-              {getMinutes(this.state.time) === 1 ? "Minute" : "Minutes"}
-            </TimeText>
-          </CircularProgressbarWithChildren>
-        </CounterContainer>
-
-        <ContentContainer>
-          <ContentTitle>
-            {this.capitalize(this.formatType(this.state.timeType))}
-          </ContentTitle>
-          <ActionButtonsContainer type="work">
-            <ActionButton
-              work
-              active={
-                this.formatType(this.state.timeType) === "work" ? true : false
-              }
-              onClick={this.setTimeForWork}
-            />
-            <ActionButton
-              relax
-              active={
-                this.formatType(this.state.timeType) === "relax" ? true : false
-              }
-              onClick={this.setTimeForRelax}
-            />
-            <ActionButton
-              coffee
-              active={
-                this.formatType(this.state.timeType) === "coffee" ? true : false
-              }
-              onClick={this.setTimeForCoffee}
-            />
-          </ActionButtonsContainer>
-        </ContentContainer>
-
-        <PlayStopContent>
-          <SquareButton
-            onClick={this.state.play === true ? this.reset : this.play}
-            play={!this.state.play}
+          <Header
+            title="Pomodoro"
+            sound
+            alert
+            onCheckAlert={this.handleSetAlert}
+            onCheckSound={this.handleSetSound}
           />
-        </PlayStopContent>
-        {/* <div className="bottomBar">
-          <div className="controls">
-            <div className="container">
-              <div className="controlsLink">
-                <a
-                  href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
-                  target="_blank"
-                >
-                  What is Pomodoro?
-                </a>
-              </div>
-              <div className="controlsCheck">
-                <span className="check">
-                  <input
-                    type="checkbox"
-                    ref="notification"
-                    id="notification"
-                    defaultChecked={this._getLocalStorage("notification")}
-                    onChange={this._setLocalStorage.bind(this, "notification")}
-                  />
-                  <label htmlFor="notification"></label>
-                  <span className="checkTitle">Notification</span>
-                </span>
 
-                <span className="check">
-                  <input
-                    type="checkbox"
-                    ref="audio"
-                    id="audio"
-                    defaultChecked={this._getLocalStorage("audio")}
-                    onChange={this._setLocalStorage.bind(this, "audio")}
-                  />
-                  <label htmlFor="audio"></label>
-                  <span className="checkTitle">Sound</span>
-                </span>
+          <CounterContainer>
+            <CircularProgressbarWithChildren
+              maxValue={this.formatTime(this.state.timeType)}
+              strokeWidth={3}
+              value={this.state.time}
+              styles={buildStyles({
+                rotation: 1,
+                strokeLinecap: "round",
+                pathTransitionDuration: 0.5,
+                pathColor: this.formatColor(this.state.timeType),
+                textColor: "#f88",
+                trailColor: "#3c405e",
+                backgroundColor: this.formatColor(this.state.timeType),
+              })}
+            >
+              <TimeNum>{this.format(this.state.time)}</TimeNum>
+              <br />
+              <TimeText>
+                {getMinutes(this.state.time) === 1 ? "Minute" : "Minutes"}
+              </TimeText>
+            </CircularProgressbarWithChildren>
+          </CounterContainer>
 
-                <span className="check">
-                  <input
-                    type="checkbox"
-                    ref="vibrate"
-                    id="vibrate"
-                    defaultChecked={this._getLocalStorage("vibrate")}
-                    onChange={this._setLocalStorage.bind(this, "vibrate")}
-                  />
-                  <label htmlFor="vibrate"></label>
-                  <span className="checkTitle">Vibration</span>
-                </span>
-              </div>{" "}
-            </div>{" "}
-          </div>{" "}
-        </div> */}
-      </Container>
+          <ContentContainer>
+            <ContentTitle>
+              {this.capitalize(this.formatType(this.state.timeType))}
+            </ContentTitle>
+            <ActionButtonsContainer type="work">
+              <ActionButton
+                work
+                active={
+                  this.formatType(this.state.timeType) === "work" ? true : false
+                }
+                onClick={this.setTimeForWork}
+              />
+              <ActionButton
+                relax
+                active={
+                  this.formatType(this.state.timeType) === "relax"
+                    ? true
+                    : false
+                }
+                onClick={this.setTimeForRelax}
+              />
+              <ActionButton
+                coffee
+                active={
+                  this.formatType(this.state.timeType) === "coffee"
+                    ? true
+                    : false
+                }
+                onClick={this.setTimeForCoffee}
+              />
+            </ActionButtonsContainer>
+          </ContentContainer>
+
+          <PlayStopContent>
+            <SquareButton
+              onClick={this.state.play === true ? this.reset : this.play}
+              play={!this.state.play}
+            />
+          </PlayStopContent>
+        </Container>
+      </HelmetProvider>
     );
   }
 }

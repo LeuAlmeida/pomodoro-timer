@@ -10,7 +10,6 @@ export const Container = styled.div`
   font-size: 24px;
 
   padding: 50px 0;
-  margin-bottom: 80px;
 `;
 
 export const Title = styled.span`

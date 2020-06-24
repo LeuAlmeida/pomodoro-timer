@@ -8,7 +8,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron:build": "react-scripts build && electron main.js"
+    "start:electron": "react-scripts build && electron main.js"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",

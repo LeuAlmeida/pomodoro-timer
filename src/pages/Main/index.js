@@ -1,6 +1,5 @@
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-
 import Mousetrap from "mousetrap";
 
 import {
@@ -19,6 +18,7 @@ import {
   TimeText,
   ContentContainer,
   ContentTitle,
+  BottomContainer,
   ActionButtonsContainer,
   ActionButton,
   PlayStopContent,
@@ -61,7 +61,16 @@ export default class Main extends React.Component {
     if (this.state.time === 0) {
       this.reset(0);
       this.alert();
+
+      if (this.formatType(this.state.timeType) === "work") {
+        this.setState({ timeType: 300, time: 300 });
+      }
+
+      if (this.formatType(this.state.timeType) === "relax") {
+        this.setState({ timeType: 1500, time: 1500 });
+      }
     }
+
     if (this.state.play === true) {
       let newState = this.state.time - 1;
       this.setState({ time: newState, title: this.getTitle(newState) });
@@ -150,7 +159,7 @@ export default class Main extends React.Component {
       time: newTime,
       timeType: newTime,
       title: this.getTitle(newTime),
-      play: true,
+      play: false,
     });
   }
 
@@ -228,14 +237,16 @@ export default class Main extends React.Component {
         new Notification("Relax :)", {
           icon: coffeeIcon,
           lang: "en",
-          body: "Go grab a coffee.",
+          body: "Take a breath.",
         });
+        alert("Take a breath ;)");
       } else {
         new Notification("The time is over!", {
           icon: codeIcon,
           lang: "en",
           body: "Hey, let's work!",
         });
+        alert("Take a breath ;)");
       }
     }
   }
@@ -292,46 +303,49 @@ export default class Main extends React.Component {
               </TimeText>
             </CircularProgressbarWithChildren>
           </CounterContainer>
+          <BottomContainer>
+            <ContentContainer>
+              <ContentTitle>
+                {this.capitalize(this.formatType(this.state.timeType))}
+              </ContentTitle>
+              <ActionButtonsContainer type="work">
+                <ActionButton
+                  work
+                  active={
+                    this.formatType(this.state.timeType) === "work"
+                      ? true
+                      : false
+                  }
+                  onClick={this.setTimeForWork}
+                />
+                <ActionButton
+                  relax
+                  active={
+                    this.formatType(this.state.timeType) === "relax"
+                      ? true
+                      : false
+                  }
+                  onClick={this.setTimeForRelax}
+                />
+                <ActionButton
+                  coffee
+                  active={
+                    this.formatType(this.state.timeType) === "coffee"
+                      ? true
+                      : false
+                  }
+                  onClick={this.setTimeForCoffee}
+                />
+              </ActionButtonsContainer>
+            </ContentContainer>
 
-          <ContentContainer>
-            <ContentTitle>
-              {this.capitalize(this.formatType(this.state.timeType))}
-            </ContentTitle>
-            <ActionButtonsContainer type="work">
-              <ActionButton
-                work
-                active={
-                  this.formatType(this.state.timeType) === "work" ? true : false
-                }
-                onClick={this.setTimeForWork}
+            <PlayStopContent>
+              <SquareButton
+                onClick={this.state.play === true ? this.reset : this.play}
+                play={!this.state.play}
               />
-              <ActionButton
-                relax
-                active={
-                  this.formatType(this.state.timeType) === "relax"
-                    ? true
-                    : false
-                }
-                onClick={this.setTimeForRelax}
-              />
-              <ActionButton
-                coffee
-                active={
-                  this.formatType(this.state.timeType) === "coffee"
-                    ? true
-                    : false
-                }
-                onClick={this.setTimeForCoffee}
-              />
-            </ActionButtonsContainer>
-          </ContentContainer>
-
-          <PlayStopContent>
-            <SquareButton
-              onClick={this.state.play === true ? this.reset : this.play}
-              play={!this.state.play}
-            />
-          </PlayStopContent>
+            </PlayStopContent>
+          </BottomContainer>
         </Container>
       </HelmetProvider>
     );

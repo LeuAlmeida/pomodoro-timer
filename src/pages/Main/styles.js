@@ -3,8 +3,10 @@ import styled, { css } from "styled-components";
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
+
+  height: 100vh;
 `;
 
 export const CounterContainer = styled.div`
@@ -38,6 +40,14 @@ export const ContentContainer = styled.div`
 
 export const ContentTitle = styled.span`
   font-size: 26px;
+`;
+
+export const BottomContainer = styled.footer`
+  display: flex;
+  flex-direction: column;
+  
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ActionButtonsContainer = styled.div`

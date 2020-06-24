@@ -40,7 +40,7 @@ export default class Main extends React.Component {
       sounding: false,
     };
     // Bind early, avoid function creation on render loop
-    this.setTimeForWork = this.setTime.bind(this, 10);
+    this.setTimeForWork = this.setTime.bind(this, 1500);
     this.setTimeForRelax = this.setTime.bind(this, 300);
     this.setTimeForCoffee = this.setTime.bind(this, 900);
     this.reset = this.reset.bind(this);
@@ -77,7 +77,7 @@ export default class Main extends React.Component {
 
   getFormatTypes() {
     return [
-      { type: "work", time: 10, color: "#7456f2" },
+      { type: "work", time: 1500, color: "#7456f2" },
       { type: "relax", time: 300, color: "#5eef94" },
       { type: "coffee", time: 900, color: "#d8f261" },
     ];
@@ -155,7 +155,7 @@ export default class Main extends React.Component {
   }
 
   setDefaultTime() {
-    let defaultTime = 10;
+    let defaultTime = 1500;
 
     this.setState({
       time: defaultTime,
@@ -224,7 +224,7 @@ export default class Main extends React.Component {
     }
 
     if (this.state.notificating) {
-      if (this.state.timeType === 10) {
+      if (this.state.timeType === 1500) {
         new Notification("Relax :)", {
           icon: coffeeIcon,
           lang: "en",

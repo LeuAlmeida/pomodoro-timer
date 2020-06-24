@@ -48,6 +48,8 @@ export const BottomContainer = styled.footer`
   
   align-items: center;
   justify-content: center;
+
+  margin-bottom: 20px;
 `;
 
 export const ActionButtonsContainer = styled.div`

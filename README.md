@@ -1,17 +1,17 @@
 <h1 align="center">
-  <img alt="Discord" title="Discord" src="tmp/discord-logo.png" width="300" />
+  <img alt="Pomodoro" title="Pomodoro" src=".github/pomodoro-logo.png" width="300" />
 </h1>
 
 <h3 align="center">
-  Discord Interface Clone
+  Pomodoro Timer
 </h3>
 
 <blockquote align="center">
-An interface clone created using ReactJS by Léu Almeida with 💜 and :coffee:
+:timer_clock: A simple Pomodoro Timer made with ReactJS, Electron, Love and Coffee :)
 </blockquote>
 
 <p align="center">
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/LeuAlmeida/discord-interface?color=%2304D361">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/LeuAlmeida/pomodoro-timer?color=%2304D361">
 
   <a href="https://rocketseat.com.br">
     <img alt="Made by Léu Almeida" src="https://img.shields.io/badge/made%20by-Léu%20Almeida-%2304D361">
@@ -22,22 +22,14 @@ An interface clone created using ReactJS by Léu Almeida with 💜 and :coffee:
 </p>
 
 <p align="center">
-  <img src="tmp/presentation.png" alt="Discord Presentation">
-</p>
-
-<p align="center">
 <h3 align="center">
-  <a href="https://leunardo.dev/discord" target="_blank">
+  <a href="https://leunardo.dev/pomodoro" target="_blank">
     ⚡ Live Preview Here ⚡
   </a>
 </h3>
 </p>
 
 <hr/>
-
-<h3>:heavy_check_mark: About the project</h3>
-
-An interface as faithful as possible, completely componentized and with clean and robust code.
 
 <h3>:electric_plug: Requeriments</h3>
 
@@ -48,10 +40,10 @@ An interface as faithful as possible, completely componentized and with clean an
 
 ```bash
 # Clone the project
-$ git clone https://github.com/LeuAlmeida/discord-interface.git
+$ git clone https://github.com/LeuAlmeida/pomodoro-timer.git
 
 # Enter the folder
-$ cd discord-interface
+$ cd pomodoro-timer
 
 # Install the dependencies
 $ yarn

@@ -56,6 +56,10 @@ $ yarn start
 
 #### Todo:
 - [ ] Fix application height (remove scrollbar)
+- [ ] Update Electron view
+- [ ] Update Electron app icon
+- [ ] Create build to Linux
+- [ ] Create build to Windows
 
 <h4 align="center">
 <a href="http://linkedin.com/in/leonardoalmeida99">Connect me in LinkedIn</a> | <a href="http://behance.net/almeida99">See my Behance</a> | <a href="https://leunardo.dev">Click here to go to my CV</a>
